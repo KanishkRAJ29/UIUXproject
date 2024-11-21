@@ -13,10 +13,11 @@ const Contact = () => {
     e.preventDefault();
     await axios
       .post(
-        "https://uiuxproject-backend.vercel.app/api/v1/message/send",
+        // "https://uiuxproject-backend.vercel.app/api/v1/message/send",
+        "http://localhost:4000/api/v1/message/send",
         { name, email, phone, message },
         {
-          
+          withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       )

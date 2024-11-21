@@ -1,49 +1,41 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import {dbConnections} from "./database/dbConnections.js"
-import messageRouter from "./router/messageRouter.js"
-import checkoutRouter from "./router/donateR.js"
-const app= express();
-dotenv.config({path: "./config.env"})
+import { dbConnections } from "./database/dbConnections.js";
+import messageRouter from "./router/messageRouter.js";
+import checkoutRouter from "./router/donateR.js";
+
+const app = express();
+dotenv.config({ path: "./config.env" });
 
 app.use(cors({
-  origin:"*",
-  methods:["POST"],
-  
+  origin: [process.env.FRONTEND_URL], // Frontend URL should be in .env file
+  methods: ["POST", "GET", "PUT", "DELETE"],
+  credentials: true, // If you need to send cookies or authentication headers
 }));
 
-// app.use((req, res, next) => {
-//   // res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   // res.setHeader("Access-Control-Allow-Credentials", "true");
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
-//   next();
-// });
-
-
-app.options("*", cors());
-
+// Body parsers
 app.use(express.json());
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1/message",messageRouter);
-app.use("/api/v1",checkoutRouter);
+// Routes
+app.use("/api/v1/message", messageRouter);
+app.use("/api/v1", checkoutRouter);
 
-
+// Root route
 app.get("/", (req, res) => {
   res.send("Welcome to the API! Use the /api/v1/message or /api/v1 endpoints.");
 });
 
+// 404 handler for non-existent routes
 app.use((req, res, next) => {
   res.status(404).json({
-      success: false,
-      message: "The route you are trying to access does not exist on this server.",
+    success: false,
+    message: "The route you are trying to access does not exist on this server.",
   });
 });
 
+// Database connection
 dbConnections();
+
 export default app;

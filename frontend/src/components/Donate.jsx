@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
@@ -17,10 +18,10 @@ const Donate = () => {
 
     try {
       const response = await axios.post(
-        "https://uiuxproject-backend.vercel.app/api/v1/checkout",
+        "http://localhost:4000/api/v1/checkout",
         { name, email, message, amount },
         {
-          
+          withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
