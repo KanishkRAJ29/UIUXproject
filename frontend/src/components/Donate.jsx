@@ -20,7 +20,7 @@ const Donate = () => {
         "https://uiuxproject-backend.vercel.app/api/v1/checkout",
         { name, email, message, amount },
         {
-          withCredentials: true,
+          
           headers: { "Content-Type": "application/json" },
         }
       );
